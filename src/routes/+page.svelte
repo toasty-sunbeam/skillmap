@@ -1,2 +1,9 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import Grid from '$lib/grid.svelte';
+</script>
+
+<h1 class="text-xl text-center">Talent tree</h1>
+
+<main>
+	<Grid />
+</main>
