@@ -4,4 +4,7 @@
 	},
 	"editor.insertSpaces": false,
 	"editor.tabSize": 4,
+	"cSpell.words": [
+		"panzoom"
+	],
 }
