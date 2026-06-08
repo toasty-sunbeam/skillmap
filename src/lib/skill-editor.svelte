@@ -35,19 +35,15 @@
 			invoker = event.source;
 			syncPosition();
 			requestAnimationFrame(() => syncPosition());
+			window.addEventListener('skillmap:panzoom', syncPosition);
 			return;
 		}
 
 		if (event.newState === 'closed') {
 			invoker = null;
+			window.removeEventListener('skillmap:panzoom', syncPosition);
 		}
 	}
-
-	$effect(() => {
-		const handler = () => syncPosition();
-		window.addEventListener('skillmap:panzoom', handler);
-		return () => window.removeEventListener('skillmap:panzoom', handler);
-	});
 </script>
 
 <dialog bind:this={dialog} id="skill-editor" popover="manual" onbeforetoggle={onBeforeToggle}>
