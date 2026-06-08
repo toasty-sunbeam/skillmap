@@ -2,6 +2,7 @@
 	import Grid from '$lib/grid.svelte';
     import Zoom from '$lib/zoom.svelte';
 	import { inEditMode, toggleEditMode } from '$lib/state/edit-mode.svelte.js';
+	import SkillEditor from '$lib/skill-editor.svelte';
 	
 </script>
 
@@ -12,4 +13,5 @@
 	<Zoom>
 		<Grid />
 	</Zoom>
+	<SkillEditor/>
 </main>

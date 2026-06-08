@@ -8,7 +8,12 @@
 
 	$effect(() => {
 		if (!container) return;
+
 		const instance = panzoom(container);
+		instance.on('transform', () => {
+			window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
+		})
+
 		return () => instance.dispose();
 	})
 </script>

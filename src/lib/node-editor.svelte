@@ -11,7 +11,7 @@
 	}
 </script>
 
-<button onclick={handleClick} oncontextmenu={handleRightClick} class="border border-red-500">
+<button onclick={handleClick} oncontextmenu={handleRightClick} class="border border-red-500" popovertarget="skill-editor">
 	<div>{name}</div>
 	<div>{points}/{maxPoints}</div>
 </button>
