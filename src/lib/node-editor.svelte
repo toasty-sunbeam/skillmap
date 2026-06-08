@@ -5,19 +5,13 @@
 	let name = $state('Skill 1');
 
 	function handleClick() {
-		if (points < maxPoints) {
-			points++;
-		}
 	}
 	function handleRightClick(event: MouseEvent) {
-		if (points > 0) {
-			points--;
-		}
 		event.preventDefault();
 	}
 </script>
 
-<button onclick={handleClick} oncontextmenu={handleRightClick} class="border border-gray-500">
+<button onclick={handleClick} oncontextmenu={handleRightClick} class="border border-red-500">
 	<div>{name}</div>
 	<div>{points}/{maxPoints}</div>
 </button>
