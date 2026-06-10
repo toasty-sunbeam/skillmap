@@ -7,7 +7,7 @@ export const nodesMap = doc.getMap('nodes'); // each node is a nested map
 export const edgesArray = doc.getArray('edges'); // each edge is {from, to}
 
 let persistence: IndexeddbPersistence | null = null;
-if (typeof window !== undefined) {
+if (typeof window !== 'undefined') {
 	persistence = new IndexeddbPersistence('talent-tree', doc);
 }
 
