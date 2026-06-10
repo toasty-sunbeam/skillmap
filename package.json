@@ -24,6 +24,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"panzoom": "^9.4.4"
+		"panzoom": "^9.4.4",
+		"y-indexeddb": "^9.0.12",
+		"yjs": "^13.6.31"
 	}
 }
