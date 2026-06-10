@@ -3,17 +3,62 @@
 	import Node from './node.svelte';
 	import { inEditMode } from './state/edit-mode.svelte.js';
 	import NodeEditor from './node-editor.svelte';
+	import { onMount } from 'svelte';
+	import { persistence, nodesMap } from './state/document.js';
+	import { useYjsMap } from './yjs.svelte.js';
+	import { addSkill } from './state/skill.js';
+
+	const CELL_SIZE = 120; // pixels per grid unit
+
+	let ready = $state(false);
+	const nodes = useYjsMap(nodesMap);
+
+	onMount(() => {
+		if (!persistence) { ready = true; return; }
+		if (persistence.synced) {
+			ready = true;
+		} else {
+			persistence.once('synced', () => { ready = true; });
+		}
+	})
+
+	function handleBackgroundClick(event: MouseEvent) {
+		if (!inEditMode()) return;
+		if (event.target !== event.currentTarget) return; // only clicks on the background itself
+
+		// Convert pixel position to grid coordinates
+		const x = Math.round(event.offsetX / CELL_SIZE);
+		const y = Math.round(event.offsetY / CELL_SIZE);
+		addSkill(x, y);
+	}
 </script>
 
-<div class="h-full w-full bg-[url(grid.png)] text-white"> <!-- Background image -->
-	<div>
-		<Icon icon="ph:graduation-cap-bold" />
-		<Icon icon="game-icons:anvil" />
-		{#if inEditMode()}
-			<NodeEditor/>
-		{:else}
-			<Node/>
-		{/if}
+{#if ready}
+	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
+	<div
+		class="relative h-full w-full bg-[url(grid.png)] text-white"
+		onclick={handleBackgroundClick}
+	>
+		{#each nodes.value.entries() as [id, node] (id)}
+			{@const x = node.get('x')}
+			{@const y = node.get('y')}
+			<div
+				class="absolute"
+				style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
+			>
+				{#if inEditMode()}
+					<NodeEditor {node} />
+				{:else}
+					<Node {node} />
+				{/if}
+			</div>
+		{/each}
+
+		<svg class="pointer-events-none absolute inset-0 h-full w-full">
+			<!-- edges will go here -->
+		</svg>
 	</div>
-	<svg></svg> <!-- Edges -->
-</div>
+
+{:else}
+	<div class="flex h-full items-center justify-center text-white">Loading...</div>
+{/if}
