@@ -1,8 +1,10 @@
 import * as Y from 'yjs';
-import { nodesMap } from '$lib/state/document';
+import { nodesMap, doc } from '$lib/state/document';
+
+type uuid = ReturnType<typeof crypto.randomUUID>;
 
 export function addSkill(x: number, y: number) {
-	const id = crypto.randomUUID();
+	const id: uuid = crypto.randomUUID();
 	const node = new Y.Map();
 
 	node.set('id', id);
@@ -17,4 +19,13 @@ export function addSkill(x: number, y: number) {
 
 export function clearSkills() {
 	nodesMap.clear();
+}
+
+export function moveSkill(id: uuid, newX: number, newY: number) {
+	const node = nodesMap.get(id) as Y.Map<any>;
+	if (!node) throw new Error(`moveSkill can't find node ${id}`);
+	doc.transact(() => {
+		node.set('x', newX);
+		node.set('y', newY);
+	})
 }
