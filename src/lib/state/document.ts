@@ -1,9 +1,10 @@
 import * as Y from 'yjs';
 import { IndexeddbPersistence } from 'y-indexeddb';
+import type { SkillNode } from '$lib/types/skill';
 
 export const doc = new Y.Doc();
 
-export const nodesMap = doc.getMap('nodes'); // each node is a nested map
+export const nodesMap: Y.Map<SkillNode> = doc.getMap('nodes'); // each node is a nested map
 export const edgesArray = doc.getArray('edges'); // each edge is {from, to}
 
 let persistence: IndexeddbPersistence | null = null;
