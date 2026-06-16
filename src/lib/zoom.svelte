@@ -7,7 +7,9 @@
 	let { children }: { children: Snippet } = $props();
 
 	const panzoomAttachment: Attachment<HTMLDivElement> = (element) => {
-		const instance = panzoom(element);
+		const instance = panzoom(element, {
+			bounds: true
+		});
 		instance.on('transform', () => {
 			window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
 		});
