@@ -22,7 +22,7 @@ export function clearSkills() {
 	nodesMap.clear();
 }
 
-export function moveSkill(id: uuid, newX: number, newY: number) {
+export function moveSkill(id: string, newX: number, newY: number) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`moveSkill can't find node ${id}`);
 	doc.transact(() => {

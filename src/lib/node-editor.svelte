@@ -13,7 +13,7 @@
 <button
 	onclick={handleClick}
 	oncontextmenu={handleRightClick}
-	class="border border-red-500"
+	class="border border-red-500 cursor-grab"
 	popovertarget="skill-editor"
 >
 	<div>{node.get('label')}</div>

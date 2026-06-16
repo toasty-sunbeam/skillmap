@@ -7,8 +7,8 @@
 	import { persistence, nodesMap } from './state/document.js';
 	import { useYjsMap } from './yjs.svelte.js';
 	import { addSkill } from './state/skill.js';
-
-	const CELL_SIZE = 120; // pixels per grid unit
+	import { CELL_SIZE } from './grid.js';
+	import { draggable } from './draggable.js';
 
 	let ready = $state(false);
 	const nodes = useYjsMap(nodesMap);
@@ -42,16 +42,22 @@
 		{#each nodes.value.entries() as [id, node] (id)}
 			{@const x = node.get('x')}
 			{@const y = node.get('y')}
-			<div
-				class="absolute"
-				style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
-			>
-				{#if inEditMode()}
+			{#if inEditMode()}
+				<div
+					class="absolute cursor-grab"
+					style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
+					{@attach draggable(node)}
+				>
 					<NodeEditor {node} />
-				{:else}
+				</div>
+			{:else}
+				<div 
+					class="absolute"
+					style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
+				>
 					<Node {node} />
-				{/if}
-			</div>
+				</div>
+			{/if}
 		{/each}
 
 		<svg class="pointer-events-none absolute inset-0 h-full w-full">
