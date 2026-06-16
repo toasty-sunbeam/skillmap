@@ -14,3 +14,7 @@ export function addSkill(x: number, y: number) {
 	node.set('maxPoints', 1);
 	nodesMap.set(id, node);
 }
+
+export function clearSkills() {
+	nodesMap.clear();
+}

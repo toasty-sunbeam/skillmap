@@ -3,10 +3,10 @@
     import Zoom from '$lib/zoom.svelte';
 	import { inEditMode, toggleEditMode } from '$lib/state/edit-mode.svelte.js';
 	import SkillEditor from '$lib/skill-editor.svelte';
-	import { addSkill } from '$lib/state/skill';
+	import { addSkill, clearSkills } from '$lib/state/skill';
 	
 	function newSkill(event: MouseEvent) {
-		addSkill(100, 100);
+		addSkill(1, 1);
 	}
 </script>
 
@@ -15,6 +15,7 @@
 <main class="h-[calc(100vh-4rem)] overflow-hidden">
 	<button onclick={newSkill}>New skill</button>
 	<button onclick={toggleEditMode}>{inEditMode() ? 'Stop editing skills' : 'Edit skills'}</button>
+	<button onclick={clearSkills}>Clear skills</button>
 	<Zoom>
 		<Grid />
 	</Zoom>
