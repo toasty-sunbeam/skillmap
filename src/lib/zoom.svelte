@@ -7,9 +7,7 @@
 	let { children }: { children: Snippet } = $props();
 
 	const panzoomAttachment: Attachment<HTMLDivElement> = (element) => {
-		const instance = panzoom(element, {
-			bounds: true
-		});
+		const instance = panzoom(element);
 		instance.on('transform', () => {
 			window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
 		});
@@ -18,6 +16,8 @@
 	};
 </script>
 
-<div class="zoom-container relative h-[calc(100vh-4rem)] w-full overflow-hidden" {@attach panzoomAttachment}>
-	{@render children()}
+<div class="overflow-hidden">
+	<div class="zoom-container relative h-[calc(100vh-4rem)] w-full" {@attach panzoomAttachment}>
+		{@render children()}
+	</div>
 </div>
