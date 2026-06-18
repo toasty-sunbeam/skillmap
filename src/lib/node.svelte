@@ -1,25 +1,28 @@
 <script lang="ts">
 	import type * as Y from 'yjs';
+	import { useYjsKey } from './yjs.svelte.js';
 
 	let { node }: { node: Y.Map<any> } = $props();
 
+	const label = useYjsKey<string>(() => node, 'label');
+	const points = useYjsKey<number>(() => node, 'points');
+	const maxPoints = useYjsKey<number>(() => node, 'maxPoints');
+
 	function handleClick() {
-		const points = node.get('points');
-		const maxPoints = node.get('maxPoints');
-		if (points < maxPoints) {
-			node.set('points', points + 1);
+		if (points.value < maxPoints.value) {
+			node.set('points', points.value + 1);
 		}
 	}
+
 	function handleRightClick(event: MouseEvent) {
 		event.preventDefault();
-		const points = node.get('points');
-		if (points > 0) {
-			node.set('points', points - 1);
+		if (points.value > 0) {
+			node.set('points', points.value - 1);
 		}
 	}
 </script>
 
 <button onclick={handleClick} oncontextmenu={handleRightClick} class="border border-gray-500">
-	<div>{node.get('label')}</div>
-	<div>{node.get('points')}/{node.get('maxPoints')}</div>
+	<div>{label.value}</div>
+	<div>{points.value}/{maxPoints.value}</div>
 </button>

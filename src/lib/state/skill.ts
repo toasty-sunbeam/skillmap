@@ -8,14 +8,16 @@ export function addSkill(x: number, y: number) {
 	const id: uuid = crypto.randomUUID();
 	const node: SkillNode = new Y.Map();
 
-	node.set('id', id);
-	node.set('x', x);
-	node.set('y', y);
-	node.set('label', "New skill");
-	node.set('icon', 'lucide: circle');
-	node.set('points', 0);
-	node.set('maxPoints', 1);
-	nodesMap.set(id, node);
+	doc.transact(() => {
+		node.set('id', id);
+		node.set('x', x);
+		node.set('y', y);
+		node.set('label', "New skill");
+		node.set('icon', 'lucide: circle');
+		node.set('points', 0);
+		node.set('maxPoints', 1);
+		nodesMap.set(id, node);
+	});
 }
 
 export function clearSkills() {
@@ -34,5 +36,7 @@ export function moveSkill(id: string, newX: number, newY: number) {
 export function renameSkill(id: string, name: string) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`Can't find node ${id}`);
-	node.set('label', name);
+	doc.transact(() => {
+		node.set('label', name);
+	});
 }
