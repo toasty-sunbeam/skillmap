@@ -7,8 +7,7 @@
 	import { persistence, nodesMap } from './state/document.js';
 	import { useYjsMap } from './yjs.svelte.js';
 	import { addSkill } from './state/skill.js';
-	import { CELL_SIZE } from './grid.js';
-	import { draggable } from './draggable.js';
+	import { skillDraggable, GRID_SNAP } from './skill-draggable.js';
 
 	let ready = $state(false);
 	const nodes = useYjsMap(nodesMap);
@@ -26,9 +25,8 @@
 		if (!inEditMode()) return;
 		if (event.target !== event.currentTarget) return; // only clicks on the background itself
 
-		// Convert pixel position to grid coordinates
-		const x = Math.round(event.offsetX / CELL_SIZE);
-		const y = Math.round(event.offsetY / CELL_SIZE);
+		const x = Math.round(event.offsetX / GRID_SNAP);
+		const y = Math.round(event.offsetY / GRID_SNAP);
 		addSkill(x, y);
 	}
 </script>
@@ -45,15 +43,15 @@
 			{#if inEditMode()}
 				<div
 					class="absolute cursor-grab"
-					style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
-					{@attach draggable(node)}
+					style="left: {x * GRID_SNAP}px; top: {y * GRID_SNAP}px; transform: translate(-50%, -50%);"
+					{@attach skillDraggable(node)}
 				>
 					<NodeEditor {node} />
 				</div>
 			{:else}
 				<div 
 					class="absolute"
-					style="left: {x * CELL_SIZE}px; top: {y * CELL_SIZE}px; transform: translate(-50%, -50%);"
+					style="left: {x * GRID_SNAP}px; top: {y * GRID_SNAP}px; transform: translate(-50%, -50%);"
 				>
 					<Node {node} />
 				</div>

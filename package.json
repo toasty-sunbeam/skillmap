@@ -24,6 +24,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@neodrag/svelte": "^3.0.0-next.8",
 		"panzoom": "^9.4.4",
 		"y-indexeddb": "^9.0.12",
 		"yjs": "^13.6.31"

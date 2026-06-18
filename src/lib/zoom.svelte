@@ -7,7 +7,12 @@
 	let { children }: { children: Snippet } = $props();
 
 	const panzoomAttachment: Attachment<HTMLDivElement> = (element) => {
-		const instance = panzoom(element);
+		const instance = panzoom(element, {
+			beforeMouseDown(event) {
+				const target = event.target;
+				return target instanceof Element && !!target.closest('[data-skill-draggable]');
+			}
+		});
 		instance.on('transform', () => {
 			window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
 		});
