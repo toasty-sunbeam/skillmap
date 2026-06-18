@@ -10,20 +10,33 @@
 	import { skillDraggable, GRID_SNAP } from './skill-draggable.js';
 
 	let ready = $state(false);
+	let suppressBackgroundClick = false; // Don't create a new skill when dragging the grid
 	const nodes = useYjsMap(nodesMap);
 
 	onMount(() => {
-		if (!persistence) { ready = true; return; }
-		if (persistence.synced) {
+		const onPanStart = () => {
+			suppressBackgroundClick = true;
+		};
+		window.addEventListener('skillmap:panstart', onPanStart);
+
+		if (!persistence) {
+			ready = true;
+		} else if (persistence.synced) {
 			ready = true;
 		} else {
 			persistence.once('synced', () => { ready = true; });
 		}
+
+		return () => window.removeEventListener('skillmap:panstart', onPanStart);
 	})
 
 	function handleBackgroundClick(event: MouseEvent) {
 		if (!inEditMode()) return;
 		if (event.target !== event.currentTarget) return; // only clicks on the background itself
+		if (suppressBackgroundClick) {
+			suppressBackgroundClick = false;
+			return;
+		}
 
 		const x = Math.round(event.offsetX / GRID_SNAP);
 		const y = Math.round(event.offsetY / GRID_SNAP);

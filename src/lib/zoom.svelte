@@ -13,6 +13,9 @@
 				return target instanceof Element && !!target.closest('[data-skill-draggable]');
 			}
 		});
+		instance.on('panstart', () => {
+			window.dispatchEvent(new CustomEvent('skillmap:panstart'));
+		});
 		instance.on('transform', () => {
 			window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
 		});
