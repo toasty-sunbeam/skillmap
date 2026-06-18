@@ -30,3 +30,9 @@ export function moveSkill(id: string, newX: number, newY: number) {
 		node.set('y', newY);
 	})
 }
+
+export function renameSkill(id: string, name: string) {
+	const node = nodesMap.get(id);
+	if (!node) throw new Error(`Can't find node ${id}`);
+	node.set('label', name);
+}

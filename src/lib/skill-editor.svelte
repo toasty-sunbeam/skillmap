@@ -1,4 +1,7 @@
 <script lang="ts">
+	import Icon from "@iconify/svelte";
+	import { renameSkill } from "./state/skill";
+
 	const MARGIN = 8;
 
 	let dialog: HTMLDialogElement;
@@ -49,8 +52,11 @@
 <dialog bind:this={dialog} id="skill-editor" popover="manual" onbeforetoggle={onBeforeToggle}>
 	<div class="flex items-start justify-between gap-2">
 		<p>Skill editor dialog</p>
-		<button type="button" popovertarget="skill-editor" popovertargetaction="hide">Close</button>
+		<button type="button" popovertarget="skill-editor" popovertargetaction="hide" class="border rounded-full">
+			<Icon icon="lucide:x"/>
+		</button>
 	</div>
+
 </dialog>
 
 <style>
