@@ -47,7 +47,7 @@
 {#if ready}
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 	<div
-		class="relative h-full w-full bg-[url(grid.png)] text-white"
+		class={[inEditMode() ? 'cursor-copy' : 'cursor-move', "relative h-full w-full bg-[url(grid.png)] text-white"]}
 		onclick={handleBackgroundClick}
 	>
 		{#each nodes.value.entries() as [id, node] (id)}
