@@ -2,7 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { nodesMap } from './state/document.js';
 	import { getEditingSkillId } from './state/editing-skill.svelte.js';
-	import { renameSkill } from './state/skill.js';
+	import { renameSkill, setMaxPoints } from './state/skill.js';
 	import { getField } from './types/skill.js';
 
 	const MARGIN = 8;
@@ -10,6 +10,7 @@
 	let dialog: HTMLDialogElement;
 	let invoker: HTMLElement | null = null;
 	let draftLabel = $state('');
+	let maxPoints = $state(1);
 
 	function syncPosition() {
 		if (!dialog || !invoker) return;
@@ -37,7 +38,7 @@
 		dialog.style.left = `${left}px`;
 	}
 
-	function loadDraftLabel() {
+	function loadState() {
 		const id = getEditingSkillId();
 		if (!id) return;
 
@@ -45,6 +46,7 @@
 		if (!node) return;
 
 		draftLabel = getField(node, 'label');
+		maxPoints = getField(node, 'maxPoints');
 	}
 
 	function saveLabel() {
@@ -57,10 +59,19 @@
 		renameSkill(id, trimmed);
 	}
 
+	function saveMaxPoints() {
+		const id = getEditingSkillId();
+		if (!id) return;
+
+		if (!Number.isFinite(maxPoints)) return; // Check that maxPoints is a number
+
+		setMaxPoints(id, maxPoints);
+	}
+
 	function onBeforeToggle(event: ToggleEvent) {
 		if (event.newState === 'open' && event.source instanceof HTMLElement) {
 			invoker = event.source;
-			loadDraftLabel();
+			loadState();
 			syncPosition();
 			requestAnimationFrame(() => syncPosition());
 			window.addEventListener('skillmap:panzoom', syncPosition);
@@ -88,6 +99,19 @@
 			type="text"
 			bind:value={draftLabel}
 			onchange={saveLabel}
+			onkeydown={(event) => {
+				if (event.key === 'Enter') {
+					event.currentTarget.blur();
+				}
+			}}
+			class="rounded border bg-transparent px-2 py-1"
+		/>
+
+		<input
+			id="max-points"
+			type="number"
+			bind:value={maxPoints}
+			onchange={saveMaxPoints}
 			onkeydown={(event) => {
 				if (event.key === 'Enter') {
 					event.currentTarget.blur();

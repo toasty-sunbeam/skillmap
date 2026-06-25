@@ -40,3 +40,11 @@ export function renameSkill(id: string, name: string) {
 		node.set('label', name);
 	});
 }
+
+export function setMaxPoints(id: string, maxPoints: number) {
+	const node = nodesMap.get(id);
+	if (!node) throw new Error(`Can't find node ${id}`);
+	doc.transact(() => {
+		node.set('maxPoints', maxPoints);
+	});
+}
