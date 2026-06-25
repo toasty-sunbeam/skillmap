@@ -11,7 +11,8 @@
 			beforeMouseDown(event) {
 				const target = event.target;
 				return target instanceof Element && !!target.closest('[data-skill-draggable]');
-			}
+			},
+			zoomDoubleClickSpeed: 1, // Prevent double-tapping from zooming in
 		});
 		instance.on('panstart', () => {
 			window.dispatchEvent(new CustomEvent('skillmap:panstart'));
