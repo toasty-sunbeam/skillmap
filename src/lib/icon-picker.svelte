@@ -138,7 +138,7 @@
 							iconId === value ? 'border-gray-900 ring-2 ring-gray-900' : 'border-gray-300'
 						]}
 					>
-						<Icon icon={iconId} />
+						<Icon icon={iconId} class="w-8 h-8"/>
 					</button>
 				{/each}
 			</div>
