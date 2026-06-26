@@ -4,6 +4,7 @@
 	import { getEditingSkillId } from './state/editing-skill.svelte.js';
 	import { renameSkill, setMaxPoints } from './state/skill.js';
 	import { getField } from './types/skill.js';
+	import IconPicker from './icon-picker.svelte';
 
 	const MARGIN = 8;
 
@@ -119,6 +120,7 @@
 			}}
 			class="rounded border bg-transparent px-2 py-1"
 		/>
+		<IconPicker/>
 	</div>
 </dialog>
 
