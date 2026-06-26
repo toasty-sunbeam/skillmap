@@ -48,3 +48,11 @@ export function setMaxPoints(id: string, maxPoints: number) {
 		node.set('maxPoints', maxPoints);
 	});
 }
+
+export function setIcon(id: string, icon: string) {
+	const node = nodesMap.get(id);
+	if (!node) throw new Error(`Can't find node ${id}`);
+	doc.transact(() => {
+		node.set('icon', icon);
+	});
+}

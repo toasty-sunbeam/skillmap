@@ -2,7 +2,7 @@
 	import Icon from '@iconify/svelte';
 	import { nodesMap } from './state/document.js';
 	import { getEditingSkillId } from './state/editing-skill.svelte.js';
-	import { renameSkill, setMaxPoints } from './state/skill.js';
+	import { renameSkill, setIcon, setMaxPoints } from './state/skill.js';
 	import { getField } from './types/skill.js';
 	import IconPicker from './icon-picker.svelte';
 
@@ -12,6 +12,7 @@
 	let invoker: HTMLElement | null = null;
 	let draftLabel = $state('');
 	let maxPoints = $state(1);
+	let icon = $state('');
 
 	function syncPosition() {
 		if (!dialog || !invoker) return;
@@ -48,6 +49,7 @@
 
 		draftLabel = getField(node, 'label');
 		maxPoints = getField(node, 'maxPoints');
+		icon = getField(node, 'icon');
 	}
 
 	function saveLabel() {
@@ -67,6 +69,14 @@
 		if (!Number.isFinite(maxPoints)) return; // Check that maxPoints is a number
 
 		setMaxPoints(id, maxPoints);
+	}
+
+	function saveIcon(iconId: string) {
+		const id = getEditingSkillId();
+		if (!id) return;
+
+		icon = iconId;
+		setIcon(id, iconId);
 	}
 
 	function onBeforeToggle(event: ToggleEvent) {
@@ -121,6 +131,7 @@
 			class="rounded border bg-transparent px-2 py-1"
 		/>
 		<IconPicker
+			value={icon}
 			prefixes={['ph']}
 			excludeNameSuffixes={[
 				'-bold',
@@ -129,6 +140,7 @@
 				'-light',
 				'-thin'
 			]}
+			onselect={saveIcon}
 		/>
 	</div>
 </dialog>
