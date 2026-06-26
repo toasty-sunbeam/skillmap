@@ -120,7 +120,16 @@
 			}}
 			class="rounded border bg-transparent px-2 py-1"
 		/>
-		<IconPicker/>
+		<IconPicker
+			prefixes={['ph']}
+			excludeNameSuffixes={[
+				'-bold',
+				'-duotone',
+				'-fill',
+				'-light',
+				'-thin'
+			]}
+		/>
 	</div>
 </dialog>
 

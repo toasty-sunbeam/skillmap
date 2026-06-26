@@ -9,11 +9,13 @@
 		value,
 		prefixes,
 		pageSize = 64,
+		excludeNameSuffixes,
 		onselect
 	}: {
 		value?: string;
 		prefixes?: string[];
 		pageSize?: number;
+		excludeNameSuffixes?: readonly string[];
 		onselect?: (icon: string) => void;
 	} = $props();
 
@@ -41,12 +43,14 @@
 	$effect(() => {
 		query;
 		prefixes?.join(',');
+		excludeNameSuffixes?.join(',');
 		page = 0;
 	});
 
 	$effect(() => {
 		debouncedQuery;
 		prefixes?.join(',');
+		excludeNameSuffixes?.join(',');
 		page;
 		effectivePageSize;
 
@@ -72,7 +76,8 @@
 			prefixes,
 			limit: effectivePageSize,
 			start: page * effectivePageSize,
-			signal: controller.signal
+			signal: controller.signal,
+			excludeNameSuffixes
 		})
 			.then((result) => {
 				icons = result.icons;

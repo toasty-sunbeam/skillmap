@@ -9,6 +9,7 @@ export interface SearchIconsOptions {
 	limit?: number;
 	start?: number;
 	signal?: AbortSignal;
+	excludeNameSuffixes?: readonly string[];
 }
 
 export interface IconifySearchResult {
@@ -39,6 +40,21 @@ function clampLimit(limit: number): number {
 	return Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, limit));
 }
 
+export function filterIconsByNameSuffixes(
+	icons: string[],
+	suffixes: readonly string[]
+): string[] {
+	if (!suffixes.length) {
+		return icons;
+	}
+
+	return icons.filter((iconId) => {
+		const colon = iconId.indexOf(':');
+		const name = colon === -1 ? iconId : iconId.slice(colon + 1);
+		return !suffixes.some((suffix) => name.endsWith(suffix));
+	});
+}
+
 export async function searchIcons(options: SearchIconsOptions): Promise<IconifySearchResult> {
 	const query = options.query.trim();
 	if (!query) {
@@ -65,9 +81,13 @@ export async function searchIcons(options: SearchIconsOptions): Promise<IconifyS
 	}
 
 	const data = (await response.json()) as IconifySearchResult;
+	const icons = filterIconsByNameSuffixes(
+		data.icons ?? [],
+		options.excludeNameSuffixes ?? []
+	);
 
 	return {
-		icons: data.icons ?? [],
+		icons,
 		total: data.total ?? 0,
 		limit: data.limit ?? limit,
 		start: data.start ?? start
