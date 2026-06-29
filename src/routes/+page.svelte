@@ -14,25 +14,20 @@
 	}
 </script>
 
-<h1 class="text-xl text-center">{treeName.value}</h1>
-<input 
-	bind:value={treeName.value}
-	onchange={saveTreeName}
-	onkeydown={(event) => {
-		if (event.key === 'Enter') {
-			event.currentTarget.blur();
-		}
-	}}
-	class="border"
-/>
-
-<main class="h-[calc(100vh-4rem)] overflow-hidden">
-	
-	<div class="relative">
-		<Zoom>
-			<Grid />
-		</Zoom>
-		<EditModeSwitch class="absolute top-0 right-0"/>
-	</div>
+<main class="relative h-full overflow-hidden">
+	<Zoom>
+		<Grid />
+	</Zoom>
+	<input 
+		bind:value={treeName.value}
+		onchange={saveTreeName}
+		onkeydown={(event) => {
+			if (event.key === 'Enter') {
+				event.currentTarget.blur();
+			}
+		}}
+		class="absolute top-0 left-1/2 -translate-x-1/2 text-white text-center cursor-pointer"
+	/>
+	<EditModeSwitch class="absolute top-0 right-0"/>
 	<SkillEditor/>
 </main>
