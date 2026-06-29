@@ -6,6 +6,7 @@
 		descriptionOn,
 		descriptionOff,
 		onchange,
+		class: className,
 	}: {
 		label: string;
 		checked: boolean;
@@ -13,6 +14,7 @@
 		descriptionOn?: string;
 		descriptionOff?: string;
 		onchange?: (checked: boolean) => void;
+		class?: string;
 	} = $props();
 
 	const descriptionId = `switch-description-${crypto.randomUUID()}`;
@@ -38,7 +40,10 @@
 	role="switch"
 	aria-checked={checked}
 	aria-describedby={activeDescription ? descriptionId : undefined}
-	class="inline-flex cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent p-1 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950"
+	class={[
+		'inline-flex cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent p-1 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950',
+		className,
+	]}
 	onclick={toggle}
 	onkeydown={onKeydown}
 >
