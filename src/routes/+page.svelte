@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Grid from '$lib/grid.svelte';
     import Zoom from '$lib/zoom.svelte';
-	import { inEditMode, toggleEditMode } from '$lib/state/edit-mode.svelte.js';
+	import EditModeSwitch from '$lib/edit-mode-switch.svelte';
 	import SkillEditor from '$lib/skill-editor.svelte';
 	import { addSkill, clearSkills, moveSkill } from '$lib/state/skill';
 	
@@ -14,7 +14,7 @@
 
 <main class="h-[calc(100vh-4rem)] overflow-hidden">
 	<button onclick={newSkill}>New skill</button>
-	<button onclick={toggleEditMode}>{inEditMode() ? 'Stop editing skills' : 'Edit skills'}</button>
+	<EditModeSwitch />
 	<button onclick={clearSkills}>Clear skills</button>
 	<Zoom>
 		<Grid />
