@@ -3,6 +3,7 @@
 	import type * as Y from 'yjs';
 	import { setEditingSkillId } from './state/editing-skill.svelte.js';
 	import { useYjsKey } from './yjs.svelte.js';
+	import DotRow from './dot-row.svelte';
 
 	let { node }: { node: Y.Map<any> } = $props();
 
@@ -26,7 +27,7 @@
 	>
 		<div class="truncate px-1 text-xs">{label.value}</div>
 		<Icon icon={icon.value} class="h-10 w-10 shrink-0" />
-		<div class="text-xs">{points.value}/{maxPoints.value}</div>
+		<DotRow points={points.value} maxPoints={maxPoints.value} />
 	</button>
 	<button class="absolute top-0 right-0" aria-label={`Delete skill ${label.value}`}>
 		<Icon icon="lucide:x"/>
