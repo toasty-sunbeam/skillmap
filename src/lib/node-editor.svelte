@@ -16,13 +16,19 @@
 	}
 </script>
 
-<button
-	onclick={openEditor}
-	oncontextmenu={(event) => event.preventDefault()}
-	class="flex h-24 w-24 cursor-grab flex-col items-center justify-center gap-1 border border-red-500"
-	popovertarget="skill-editor"
->
-	<div class="truncate px-1 text-xs">{label.value}</div>
-	<Icon icon={icon.value} class="h-10 w-10 shrink-0" />
-	<div class="text-xs">{points.value}/{maxPoints.value}</div>
-</button>
+<div class="relative">
+	<button
+		onclick={openEditor}
+		oncontextmenu={(event) => event.preventDefault()}
+		class="flex h-24 w-24 flex-col items-center justify-center gap-1 border border-red-500"
+		popovertarget="skill-editor"
+		aria-label={`Edit skill ${label.value}`}
+	>
+		<div class="truncate px-1 text-xs">{label.value}</div>
+		<Icon icon={icon.value} class="h-10 w-10 shrink-0" />
+		<div class="text-xs">{points.value}/{maxPoints.value}</div>
+	</button>
+	<button class="absolute top-0 right-0" aria-label={`Delete skill ${label.value}`}>
+		<Icon icon="lucide:x"/>
+	</button>
+</div>
