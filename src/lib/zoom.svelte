@@ -25,8 +25,6 @@
 	};
 </script>
 
-<div class="overflow-hidden">
-	<div class="zoom-container relative h-[calc(100vh-4rem)] w-full" {@attach panzoomAttachment}>
-		{@render children()}
-	</div>
+<div class="zoom-container relative h-full w-full" {@attach panzoomAttachment}>
+	{@render children()}
 </div>

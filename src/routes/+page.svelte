@@ -14,20 +14,23 @@
 	}
 </script>
 
-<main class="relative h-full overflow-hidden">
+<main class="relative h-dvh overflow-hidden">
 	<Zoom>
 		<Grid />
 	</Zoom>
-	<input 
-		bind:value={treeName.value}
-		onchange={saveTreeName}
-		onkeydown={(event) => {
-			if (event.key === 'Enter') {
-				event.currentTarget.blur();
-			}
-		}}
-		class="absolute top-0 left-1/2 -translate-x-1/2 text-white text-center cursor-pointer"
-	/>
-	<EditModeSwitch class="absolute top-0 right-0"/>
+	<div class="flex flex-row justify-between absolute top-0 left-0 right-0 bg-gray-800/50">
+		<div class="w-48"></div>
+		<input
+			bind:value={treeName.value}
+			onchange={saveTreeName}
+			onkeydown={(event) => {
+				if (event.key === 'Enter') {
+					event.currentTarget.blur();
+				}
+			}}
+			class="text-white text-center cursor-pointer place-self-center"
+		/>
+		<EditModeSwitch />
+	</div>
 	<SkillEditor/>
 </main>

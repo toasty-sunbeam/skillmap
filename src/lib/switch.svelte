@@ -1,6 +1,6 @@
 <script lang="ts">
 	let {
-		label,
+		ariaLabel,
 		checked,
 		description,
 		descriptionOn,
@@ -8,7 +8,7 @@
 		onchange,
 		class: className,
 	}: {
-		label: string;
+		ariaLabel: string;
 		checked: boolean;
 		description?: string;
 		descriptionOn?: string;
@@ -40,6 +40,7 @@
 	role="switch"
 	aria-checked={checked}
 	aria-describedby={activeDescription ? descriptionId : undefined}
+	title={ariaLabel}
 	class={[
 		'inline-flex cursor-pointer items-center gap-3 rounded-md border-0 bg-transparent p-1 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950',
 		className,
@@ -47,7 +48,6 @@
 	onclick={toggle}
 	onkeydown={onKeydown}
 >
-	<span class="text-sm select-none">{label}</span>
 	<span
 		aria-hidden="true"
 		class={[
