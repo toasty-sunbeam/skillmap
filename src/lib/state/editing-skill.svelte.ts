@@ -1,9 +1,11 @@
-let editingSkillId = $state<string | null>(null);
+import type { NodeId } from '$lib/types/ids.js';
 
-export function getEditingSkillId(): string | null {
+let editingSkillId = $state<NodeId | null>(null);
+
+export function getEditingSkillId(): NodeId | null {
 	return editingSkillId;
 }
 
-export function setEditingSkillId(id: string | null) {
+export function setEditingSkillId(id: NodeId | null) {
 	editingSkillId = id;
 }

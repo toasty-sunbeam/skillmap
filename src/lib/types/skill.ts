@@ -1,7 +1,8 @@
 import type * as Y from 'yjs';
+import type { NodeId } from './ids.js';
 
 export interface SkillFields {
-	id: string;
+	id: NodeId;
 	x: number;
 	y: number;
 	label: string;

@@ -1,11 +1,10 @@
 import * as Y from 'yjs';
 import { nodesMap, doc } from '$lib/state/document';
 import type { SkillNode } from '$lib/types/skill';
-
-type uuid = ReturnType<typeof crypto.randomUUID>;
+import { newNodeId, type NodeId } from '$lib/types/ids';
 
 export function addSkill(x: number, y: number) {
-	const id: uuid = crypto.randomUUID();
+	const id = newNodeId();
 	const node: SkillNode = new Y.Map();
 
 	doc.transact(() => {
@@ -24,7 +23,7 @@ export function clearSkills() {
 	nodesMap.clear();
 }
 
-export function moveSkill(id: string, newX: number, newY: number) {
+export function moveSkill(id: NodeId, newX: number, newY: number) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`moveSkill can't find node ${id}`);
 	doc.transact(() => {
@@ -33,7 +32,7 @@ export function moveSkill(id: string, newX: number, newY: number) {
 	})
 }
 
-export function renameSkill(id: string, name: string) {
+export function renameSkill(id: NodeId, name: string) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`Can't find node ${id}`);
 	doc.transact(() => {
@@ -41,7 +40,7 @@ export function renameSkill(id: string, name: string) {
 	});
 }
 
-export function setMaxPoints(id: string, maxPoints: number) {
+export function setMaxPoints(id: NodeId, maxPoints: number) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`Can't find node ${id}`);
 	doc.transact(() => {
@@ -49,7 +48,7 @@ export function setMaxPoints(id: string, maxPoints: number) {
 	});
 }
 
-export function setIcon(id: string, icon: string) {
+export function setIcon(id: NodeId, icon: string) {
 	const node = nodesMap.get(id);
 	if (!node) throw new Error(`Can't find node ${id}`);
 	doc.transact(() => {
