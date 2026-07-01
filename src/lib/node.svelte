@@ -28,7 +28,7 @@
 <button
 	onclick={handleClick}
 	oncontextmenu={handleRightClick}
-	class="flex h-24 w-24 flex-col items-center justify-center gap-1 border border-gray-500 rounded-sm"
+	class="flex h-24 w-24 flex-col items-center justify-center gap-1 border border-gray-500 rounded-sm bg-black"
 >
 	<div class="truncate px-1 text-xs">{label.value}</div>
 
