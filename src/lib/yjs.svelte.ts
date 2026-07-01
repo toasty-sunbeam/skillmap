@@ -58,3 +58,29 @@ export function useYjsKey<T>(getMap: () => Y.Map<any>, key: string, defaultValue
 		}
 	};
 }
+
+/**
+ * Subscribes to a Y.Array and mirrors it as reactive Svelte state.
+ *
+ * @returns An object with a `value` getter that always returns the current snapshot.
+ */
+export function useYjsArray<T>(yarray: Y.Array<T>) {
+	let snapshot = $state([...yarray.toArray()]);
+
+	$effect(() => {
+		snapshot = [...yarray.toArray()];
+
+		const handler = () => {
+			snapshot = [...yarray.toArray()];
+		};
+		yarray.observe(handler);
+
+		return () => yarray.unobserve(handler);
+	});
+
+	return {
+		get value() {
+			return snapshot;
+		}
+	};
+}

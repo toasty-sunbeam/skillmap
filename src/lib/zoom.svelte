@@ -18,7 +18,11 @@
 		const instance = panzoom(element, {
 			beforeMouseDown(event) {
 				const target = event.target;
-				return target instanceof Element && !!target.closest('[data-skill-draggable]');
+				if (!(target instanceof Element)) return false;
+				return (
+					!!target.closest('[data-skill-draggable]') ||
+					!!target.closest('[data-connection-border]')
+				);
 			},
 			zoomDoubleClickSpeed: 1, // Prevent double-tapping from zooming in
 			minZoom: 0.25,
