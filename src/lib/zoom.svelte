@@ -20,7 +20,9 @@
 				const target = event.target;
 				return target instanceof Element && !!target.closest('[data-skill-draggable]');
 			},
-			zoomDoubleClickSpeed: 1 // Prevent double-tapping from zooming in
+			zoomDoubleClickSpeed: 1, // Prevent double-tapping from zooming in
+			minZoom: 0.25,
+			maxZoom: 2,
 		});
 
 		syncTransform(instance);
