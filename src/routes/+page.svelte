@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Grid from '$lib/grid.svelte';
-    import Zoom from '$lib/zoom.svelte';
+	import GridBackground from '$lib/grid-background.svelte';
+	import Zoom from '$lib/zoom.svelte';
 	import EditModeSwitch from '$lib/edit-mode-switch.svelte';
 	import SkillEditor from '$lib/skill-editor.svelte';	
 	import { DEFAULT_TREE_NAME, setTreeName } from '$lib/state/metadata';
@@ -14,7 +15,8 @@
 	}
 </script>
 
-<main class="relative h-dvh overflow-hidden">
+<main class="relative h-dvh overflow-hidden bg-[#141414]">
+	<GridBackground />
 	<Zoom>
 		<Grid />
 	</Zoom>
