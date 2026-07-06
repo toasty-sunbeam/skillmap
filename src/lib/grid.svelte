@@ -101,7 +101,7 @@
 		class={[inEditMode() ? 'cursor-copy' : 'cursor-move', 'relative h-full w-full text-white']}
 		onclick={handleBackgroundClick}
 	>
-		<GridEdges {gridEl} edges={edges.value} />
+		<GridEdges {gridEl} edges={edges.value} editMode={inEditMode()} />
 
 		{#each nodes.value.entries() as [id, node] (id)}
 			{@const x = node.get('x')}

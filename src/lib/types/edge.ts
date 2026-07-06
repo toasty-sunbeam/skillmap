@@ -11,6 +11,7 @@ export interface EdgeLine {
 	key: EdgeKey;
 	from: GridPoint;
 	to: GridPoint;
+	edge: Edge;
 }
 
 /** Canonical order for undirected edges: smaller id first. */

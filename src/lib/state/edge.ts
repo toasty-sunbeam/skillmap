@@ -22,6 +22,20 @@ export function addEdge(a: NodeId, b: NodeId) {
 	});
 }
 
+export function removeEdge(a: NodeId, b: NodeId) {
+	const normalized = normalizeEdge(a, b);
+	const key = edgeKey(normalized);
+	doc.transact(() => {
+		for (let i = edgesArray.length - 1; i >= 0; i--) {
+			const edge = edgesArray.get(i) as Edge;
+			if (edgeKey(edge) === key) {
+				edgesArray.delete(i, 1);
+				return;
+			}
+		}
+	});
+}
+
 export function removeEdgesForNode(id: NodeId) {
 	doc.transact(() => {
 		for (let i = edgesArray.length - 1; i >= 0; i--) {
