@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import type * as Y from 'yjs';
-	import { setEditingSkillId } from './state/editing-skill.svelte.js';
+	import { getEditingSkillId, setEditingSkillId } from './state/editing-skill.svelte.js';
+	import { deleteSkill } from './state/skill.js';
 	import { useYjsKey } from './yjs.svelte.js';
 	import DotRow from './dot-row.svelte';
 	import ConnectionBorder from './connection-border.svelte';
@@ -17,6 +18,14 @@
 
 	function openEditor() {
 		setEditingSkillId(skillId);
+	}
+
+	function handleDelete() {
+		deleteSkill(skillId);
+		if (getEditingSkillId() === skillId) {
+			setEditingSkillId(null);
+			document.getElementById('skill-editor')?.hidePopover();
+		}
 	}
 </script>
 
@@ -35,7 +44,9 @@
 		</button>
 	</ConnectionBorder>
 	<button
+		type="button"
 		class="absolute top-0 right-0 z-20"
+		onclick={handleDelete}
 		onpointerdown={(event) => event.stopPropagation()}
 		aria-label={`Delete skill ${label.value}`}
 	>
