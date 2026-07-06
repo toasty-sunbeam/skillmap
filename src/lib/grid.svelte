@@ -25,10 +25,11 @@
 	const edges = useYjsArray(edgesArray);
 
 	onMount(() => {
-		const onPanStart = () => {
+		const suppressClick = () => {
 			suppressBackgroundClick = true;
 		};
-		window.addEventListener('skillmap:panstart', onPanStart);
+		window.addEventListener('skillmap:panstart', suppressClick);
+		window.addEventListener('skillmap:skilldragstart', suppressClick);
 
 		if (!persistence) {
 			ready = true;
@@ -38,7 +39,10 @@
 			persistence.once('synced', () => { ready = true; });
 		}
 
-		return () => window.removeEventListener('skillmap:panstart', onPanStart);
+		return () => {
+			window.removeEventListener('skillmap:panstart', suppressClick);
+			window.removeEventListener('skillmap:skilldragstart', suppressClick);
+		};
 	});
 
 	$effect(() => {

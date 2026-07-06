@@ -25,7 +25,6 @@
 		<button
 			onclick={openEditor}
 			oncontextmenu={(event) => event.preventDefault()}
-			onpointerdown={(event) => event.stopPropagation()}
 			class="relative z-10 flex h-full w-full flex-col items-center justify-center gap-1 rounded-sm bg-black"
 			popovertarget="skill-editor"
 			aria-label={`Edit skill ${label.value}`}

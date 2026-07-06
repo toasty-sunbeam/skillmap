@@ -55,6 +55,9 @@ export function skillDraggable(node: SkillNode): Attachment<HTMLElement> {
 		grid([GRID_SNAP, GRID_SNAP]),
 		centeredTransform,
 		events({
+			onDragStart() {
+				window.dispatchEvent(new CustomEvent('skillmap:skilldragstart'));
+			},
 			onDrag() {
 				window.dispatchEvent(new CustomEvent('skillmap:panzoom'));
 			},
