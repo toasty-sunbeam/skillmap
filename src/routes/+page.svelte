@@ -21,7 +21,7 @@
 		<Grid />
 	</Zoom>
 	<div class="flex flex-row justify-between absolute top-0 left-0 right-0 bg-gray-800/50">
-		<div class="w-48"></div>
+		<EditModeSwitch />
 		<input
 			bind:value={treeName.value}
 			onchange={saveTreeName}
@@ -32,7 +32,7 @@
 			}}
 			class="text-white text-center cursor-pointer place-self-center"
 		/>
-		<EditModeSwitch />
+		<div class="w-48"></div>
 	</div>
 	<SkillEditor/>
 </main>

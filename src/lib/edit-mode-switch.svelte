@@ -7,7 +7,6 @@
 </script>
 
 <div class="flex flex-row items-center" title="Edit mode">
-	<Icon icon="lucide:edit" class="text-white w-6 h-6" />
 	<Switch
 		class={className}
 		ariaLabel="Edit mode"
@@ -16,4 +15,6 @@
 		descriptionOff="Edit mode is off."
 		onchange={setEditMode}
 	/>
+	<Icon icon="lucide:edit" class="text-white w-6 h-6" />
+	<div class="text-white mx-2">Edit</div>
 </div>
