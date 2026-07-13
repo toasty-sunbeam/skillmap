@@ -3,6 +3,7 @@
 	import type * as Y from 'yjs';
 	import DotRow from './dot-row.svelte';
 	import { useYjsKey } from './yjs.svelte.js';
+	import { sounds } from './sound.js';
 
 	let { node }: { node: Y.Map<any> } = $props();
 
@@ -14,6 +15,7 @@
 	function handleClick() {
 		if (points.value < maxPoints.value) {
 			node.set('points', points.value + 1);
+			sounds.playSkillUp();
 		}
 	}
 
@@ -21,6 +23,7 @@
 		event.preventDefault();
 		if (points.value > 0) {
 			node.set('points', points.value - 1);
+			sounds.playSkillDown();
 		}
 	}
 </script>
