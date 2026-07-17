@@ -14,6 +14,7 @@
 <style>
 	.tool-button {
 		border-radius: 3px;
+		padding: 0 .5em;
 	}
 	.tool-button.selected {
 		background: #2b7fff;
@@ -21,16 +22,17 @@
 	}
 </style>
 
-
-<!-- TODO: Accessibility -->
-<div class="flex flex-col absolute top-8 left-1 text-white border border-white rounded-sm px-2 py-1">
+<fieldset class="flex flex-col absolute top-8 left-1 bg-black text-white border border-white rounded-sm px-1 py-1 min-w-35">
+	<legend class="sr-only">Editing tools</legend>
 	{#each TOOLS as tool}
-		<button
-			class="tool-button"
-			class:selected={selectedTool === tool.id}
-			onclick={() => selectedTool = tool.id}
-		>
+		<label class="tool-button" class:selected={selectedTool === tool.id}>
+			<input
+				type="radio"
+				class="sr-only"
+				bind:group={selectedTool}
+				value={tool.id}
+			/>
 			{tool.label}
-		</button>
+		</label>
 	{/each}
-</div>
+</fieldset>
