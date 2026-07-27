@@ -22,7 +22,7 @@
 <main class="relative h-dvh overflow-hidden bg-[#141414]">
 	<GridBackground />
 	<Zoom>
-		<Grid />
+		<Grid activeTool={activeTool} />
 	</Zoom>
 	<div class="flex flex-row justify-between absolute top-0 left-0 right-0 bg-gray-800/50">
 		<EditModeSwitch />

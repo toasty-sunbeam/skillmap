@@ -2,7 +2,6 @@
 	const TOOLS = [
 		{ id: 'add-skill', label: 'Add skill' },
 		{ id: 'edit-skill', label: 'Edit skill' },
-		{ id: 'delete-skill', label: 'Delete skill' },
 		{ id: 'connect-skills', label: 'Connect skills' },
 	] as const;
 	export type ToolId = (typeof TOOLS)[number]['id'];

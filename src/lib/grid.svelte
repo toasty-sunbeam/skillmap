@@ -17,6 +17,9 @@
 		cancelConnectionDrag
 	} from './state/connection-drag.svelte.js';
 	import { getSkillIdFromElement } from './grid-coords.js';
+	import type { ToolId } from './toolbox.svelte';
+
+	let { activeTool }: { activeTool: ToolId } = $props();
 
 	let ready = $state(false);
 	let gridEl = $state<HTMLDivElement | null>(null);
@@ -81,16 +84,16 @@
 	});
 
 	function handleBackgroundClick(event: MouseEvent) {
-		if (!inEditMode()) return;
-		if (event.target !== event.currentTarget) return;
-		if (suppressBackgroundClick) {
-			suppressBackgroundClick = false;
-			return;
-		}
+		if (inEditMode() && activeTool == 'add-skill') {
+			if (suppressBackgroundClick) {
+				suppressBackgroundClick = false;
+				return;
+			}
 
-		const x = Math.round(event.offsetX / GRID_SNAP);
-		const y = Math.round(event.offsetY / GRID_SNAP);
-		addSkill(x, y);
+			const x = Math.round(event.offsetX / GRID_SNAP);
+			const y = Math.round(event.offsetY / GRID_SNAP);
+			addSkill(x, y);
+		}
 	}
 </script>
 
@@ -98,7 +101,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 	<div
 		bind:this={gridEl}
-		class={[inEditMode() ? 'cursor-copy' : 'cursor-move', 'relative h-full w-full text-white']}
+		class='relative h-full w-full text-white'
 		onclick={handleBackgroundClick}
 	>
 		<GridEdges {gridEl} edges={edges.value} editMode={inEditMode()} />
@@ -113,7 +116,7 @@
 					style="left: {x * GRID_SNAP}px; top: {y * GRID_SNAP}px; transform: translate(-50%, -50%);"
 					{@attach skillDraggable(node)}
 				>
-					<NodeEditor {node} />
+					<NodeEditor {node} {activeTool} />
 				</div>
 			{:else}
 				<div

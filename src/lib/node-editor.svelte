@@ -7,8 +7,9 @@
 	import DotRow from './dot-row.svelte';
 	import ConnectionBorder from './connection-border.svelte';
 	import { getField } from './types/skill.js';
+	import type { ToolId } from './toolbox.svelte';
 
-	let { node }: { node: Y.Map<any> } = $props();
+	let { node, activeTool }: { node: Y.Map<any>, activeTool: ToolId } = $props();
 
 	const skillId = $derived(getField(node, 'id'));
 	const label = useYjsKey<string>(() => node, 'label');
@@ -17,7 +18,9 @@
 	const maxPoints = useYjsKey<number>(() => node, 'maxPoints');
 
 	function openEditor() {
-		setEditingSkillId(skillId);
+		if (activeTool === 'edit-skill') {
+			setEditingSkillId(skillId);
+		}
 	}
 
 	function handleDelete() {
@@ -35,7 +38,8 @@
 			onclick={openEditor}
 			oncontextmenu={(event) => event.preventDefault()}
 			class="relative z-10 flex h-full w-full flex-col items-center justify-center gap-1 rounded-sm bg-black"
-			popovertarget="skill-editor"
+			class:cursor-pointer={activeTool === 'edit-skill'}
+			popovertarget={activeTool === 'edit-skill' ? 'skill-editor' : undefined}
 			aria-label={`Edit skill ${label.value}`}
 		>
 			<div class="truncate px-1 text-xs">{label.value}</div>
