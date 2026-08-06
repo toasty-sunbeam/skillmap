@@ -19,7 +19,7 @@
 	// Don't pan when clicking skill nodes, connection handles, or edges
 	const panBlocked = (target: EventTarget | null) =>
 		!(target instanceof Element) ||
-		!!target.closest('[data-skill-draggable], [data-connection-border], [data-edge-hit]');
+		!!target.closest('[data-skill-draggable], [data-edge-hit]');
 
 	const panzoomAttachment: Attachment<HTMLDivElement> = (element) => {
 		let drag: { x: number; y: number; tx: number; ty: number } | null = null;

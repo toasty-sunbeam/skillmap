@@ -104,7 +104,7 @@
 		class='relative h-full w-full text-white'
 		onclick={handleBackgroundClick}
 	>
-		<GridEdges {gridEl} edges={edges.value} editMode={inEditMode()} />
+		<GridEdges {gridEl} edges={edges.value} editMode={inEditMode()} {activeTool} />
 
 		{#each nodes.value.entries() as [id, node] (id)}
 			{@const x = node.get('x')}
