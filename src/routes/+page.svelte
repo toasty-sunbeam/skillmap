@@ -4,24 +4,28 @@
 	import Zoom from '$lib/zoom.svelte';
 	import EditModeSwitch from '$lib/edit-mode-switch.svelte';
 	import SkillEditor from '$lib/skill-editor.svelte';	
+	import Toolbox, { type ToolId } from '$lib/toolbox.svelte';
 	import { DEFAULT_TREE_NAME, setTreeName } from '$lib/state/metadata';
 	import { metadata } from '$lib/state/document';
 	import { useYjsKey } from '$lib/yjs.svelte';
+	import { inEditMode } from '$lib/state/edit-mode.svelte';
 
 	const treeName = useYjsKey<string>(() => metadata, 'name', DEFAULT_TREE_NAME);
 
 	function saveTreeName() {
 		setTreeName(treeName.value.trim());
 	}
+
+	let activeTool: ToolId = $state('add-skill');
 </script>
 
 <main class="relative h-dvh overflow-hidden bg-[#141414]">
 	<GridBackground />
 	<Zoom>
-		<Grid />
+		<Grid activeTool={activeTool} />
 	</Zoom>
 	<div class="flex flex-row justify-between absolute top-0 left-0 right-0 bg-gray-800/50">
-		<div class="w-48"></div>
+		<EditModeSwitch />
 		<input
 			bind:value={treeName.value}
 			onchange={saveTreeName}
@@ -32,7 +36,10 @@
 			}}
 			class="text-white text-center cursor-pointer place-self-center"
 		/>
-		<EditModeSwitch />
+		<div class="w-48"></div>
 	</div>
+	{#if inEditMode()}
+		<Toolbox bind:selectedTool={activeTool} />
+	{/if}
 	<SkillEditor/>
 </main>
