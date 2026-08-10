@@ -3,10 +3,13 @@
 	import { inEditMode } from './state/edit-mode.svelte.js';
 	import NodeEditor from './node-editor.svelte';
 	import { onMount } from 'svelte';
-	import { persistence, nodesMap, edgesArray } from './state/document.js';
-	import { useYjsMap, useYjsArray } from './yjs.svelte.js';
+	import { persistence, nodesMap, edgesMap } from './state/document.js';
+	import { useYjsMap } from './yjs.svelte.js';
 	import { addSkill } from './state/skill.js';
 	import { addEdge } from './state/edge.js';
+	import { connectedEdges } from './types/edge.js';
+	import { asNodeId } from './types/ids.js';
+	import { getField } from './types/skill.js';
 	import { skillDraggable, GRID_SNAP } from './skill-draggable.js';
 	import GridEdges from './grid-edges.svelte';
 	import ConnectionPreview from './connection-preview.svelte';
@@ -25,7 +28,7 @@
 	let gridEl = $state<HTMLDivElement | null>(null);
 	let suppressBackgroundClick = false; // Don't create a new skill when dragging the grid
 	const nodes = useYjsMap(nodesMap);
-	const edges = useYjsArray(edgesArray);
+	const edges = useYjsMap(edgesMap);
 
 	onMount(() => {
 		const suppressClick = () => {
@@ -95,6 +98,11 @@
 			addSkill(x, y);
 		}
 	}
+
+	// Skip edges left pointing at a node that another peer deleted.
+	const visibleEdges = $derived(
+		connectedEdges(edges.value, new Set([...nodes.value.keys()].map(asNodeId)))
+	);
 </script>
 
 {#if ready}
@@ -104,11 +112,11 @@
 		class='relative h-full w-full text-white'
 		onclick={handleBackgroundClick}
 	>
-		<GridEdges {gridEl} edges={edges.value} editMode={inEditMode()} {activeTool} />
+		<GridEdges {gridEl} edges={visibleEdges} editMode={inEditMode()} {activeTool} />
 
 		{#each nodes.value.entries() as [id, node] (id)}
-			{@const x = node.get('x')}
-			{@const y = node.get('y')}
+			{@const x = getField(node, 'x')}
+			{@const y = getField(node, 'y')}
 			{#if inEditMode()}
 				<div
 					data-skill-id={id}

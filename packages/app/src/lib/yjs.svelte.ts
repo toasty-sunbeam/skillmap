@@ -8,8 +8,8 @@ import type * as Y from 'yjs';
  *          Reading `.value` in a template or derived registers a dependency, so the UI
  *          re-runs when Yjs updates the map.
  */
-export function useYjsMap(ymap: Y.Map<any>) {
-	let snapshot = $state(new Map(ymap.entries()));
+export function useYjsMap<T>(ymap: Y.Map<T>) {
+	let snapshot = $state(new Map<string, T>(ymap.entries()));
 
 	$effect(() => {
 		// Sync initial state

@@ -10,7 +10,13 @@ export const doc = new Y.Doc();
 
 export const metadata: MetadataMap = doc.getMap('meta');
 export const nodesMap: Y.Map<SkillNode> = doc.getMap('nodes'); // each node is a nested map
-export const edgesArray: Y.Array<Edge> = doc.getArray('edges'); // each edge is {from, to}
+
+/**
+ * Edges keyed by their canonical `edgeKey` (smaller node id first), so that peers
+ * adding the same connection concurrently converge on a single entry rather than
+ * each contributing one.
+ */
+export const edgesMap: Y.Map<Edge> = doc.getMap('edges');
 
 let persistence: IndexeddbPersistence | null = null;
 if (typeof window !== 'undefined') {

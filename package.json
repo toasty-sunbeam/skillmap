@@ -7,6 +7,7 @@
 	"scripts": {
 		"dev": "bun run --filter @skillmap/app dev",
 		"build": "bun run --filter '*' build",
-		"check": "bun run --filter '*' check"
+		"check": "bun run --filter '*' check",
+		"test": "bun run --filter '*' test"
 	}
 }
