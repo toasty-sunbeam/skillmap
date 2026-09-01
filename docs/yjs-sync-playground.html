@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yjs sync playground</title>
+<style>
+	:root {
+		--bg: #0f1115;
+		--panel: #171a21;
+		--panel-2: #1d212b;
+		--border: #2a2f3a;
+		--text: #e4e7ec;
+		--muted: #8b93a3;
+		--accent: #5ec8c0;
+		--accent-dim: #33544f;
+		--warn: #e0a75e;
+		--bad: #e0705e;
+		--good: #6fc98a;
+		--mono: 'SF Mono', 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		padding: 24px;
+		background: var(--bg);
+		color: var(--text);
+		font: 15px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	}
+	h1 { font-size: 20px; margin: 0 0 4px; }
+	h2 { font-size: 14px; margin: 0 0 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+	.wrap { max-width: 1180px; margin: 0 auto; }
+	.intro { color: var(--muted); max-width: 780px; margin: 0 0 20px; }
+	.intro code { color: var(--accent); background: var(--panel-2); padding: 1px 5px; border-radius: 4px; font-family: var(--mono); font-size: 13px; }
+	.bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		align-items: center;
+		background: var(--panel);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 12px 14px;
+		margin-bottom: 18px;
+	}
+	.bar .group { display: flex; align-items: center; gap: 8px; padding-right: 14px; border-right: 1px solid var(--border); }
+	.bar .group:last-child { border-right: none; }
+	.bar label.radio { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); cursor: pointer; }
+	.bar label.radio input { accent-color: var(--accent); }
+	button {
+		font: inherit;
+		font-size: 13px;
+		background: var(--panel-2);
+		color: var(--text);
+		border: 1px solid var(--border);
+		border-radius: 7px;
+		padding: 7px 12px;
+		cursor: pointer;
+	}
+	button:hover { border-color: var(--accent); }
+	button:disabled { opacity: 0.4; cursor: default; }
+	button.primary { background: var(--accent-dim); border-color: var(--accent); color: #eafffb; font-weight: 600; }
+	button.small { padding: 3px 8px; font-size: 12px; }
+	.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+	@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+	.peer {
+		background: var(--panel);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 16px;
+	}
+	.peer-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+	.peer-head .id { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+	.field-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+	.field-row label { font-size: 12px; color: var(--muted); width: 52px; flex-shrink: 0; }
+	input[type="text"], input[type="number"] {
+		background: var(--panel-2);
+		border: 1px solid var(--border);
+		color: var(--text);
+		border-radius: 6px;
+		padding: 5px 8px;
+		font: inherit;
+		font-size: 13px;
+	}
+	input[type="text"] { flex: 1; }
+	input[type="number"] { width: 58px; }
+	.node-row {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 8px;
+		background: var(--panel-2);
+		border-radius: 6px;
+		margin-bottom: 6px;
+	}
+	.node-row .stepper { display: flex; align-items: center; gap: 2px; }
+	.node-row .val { font-family: var(--mono); font-size: 12px; width: 26px; text-align: center; color: var(--muted); }
+	.node-row .pts { font-family: var(--mono); font-size: 12px; color: var(--good); min-width: 34px; }
+	.edge-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-family: var(--mono);
+		font-size: 12px;
+		padding: 5px 8px;
+		background: var(--panel-2);
+		border-radius: 6px;
+		margin-bottom: 5px;
+	}
+	.edge-row.dup { border: 1px solid var(--bad); color: var(--bad); }
+	.add-edge-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+	select {
+		background: var(--panel-2);
+		border: 1px solid var(--border);
+		color: var(--text);
+		border-radius: 6px;
+		padding: 5px 6px;
+		font: inherit;
+		font-size: 12px;
+	}
+	.sv-box {
+		margin-top: 12px;
+		background: var(--panel-2);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		padding: 10px 12px;
+		font-family: var(--mono);
+		font-size: 12px;
+	}
+	.sv-box .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
+	.sv-box .bytes { color: var(--accent); word-break: break-all; }
+	.sv-box .size { color: var(--muted); margin-top: 4px; }
+	.sync-zone { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 22px 0; }
+	.log {
+		width: 100%;
+		max-width: 720px;
+		background: var(--panel);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 10px 14px;
+		font-family: var(--mono);
+		font-size: 12.5px;
+		max-height: 260px;
+		overflow-y: auto;
+	}
+	.log .chip { padding: 4px 0; border-bottom: 1px dashed var(--border); color: var(--muted); }
+	.log .chip:last-child { border-bottom: none; }
+	.log .chip.a-to-b { color: #8fd3ce; }
+	.log .chip.b-to-a { color: #d3b98f; }
+	.log .chip.good { color: var(--good); font-weight: 600; }
+	.log .chip.bad { color: var(--bad); font-weight: 600; }
+	.log .chip.divider { color: var(--muted); text-align: center; letter-spacing: 0.1em; font-size: 11px; margin: 6px 0; }
+	.footnote { color: var(--muted); font-size: 12px; margin-top: 26px; max-width: 780px; }
+	.section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 14px 0 6px; }
+	.warn-banner {
+		display: none;
+		background: #3a2a1a;
+		border: 1px solid var(--warn);
+		color: #f0cfa0;
+		border-radius: 8px;
+		padding: 10px 14px;
+		font-size: 13px;
+		margin-bottom: 16px;
+	}
+</style>
+</head>
+<body>
+<div class="wrap">
+	<h1>Yjs sync playground</h1>
+	<p class="intro">
+		Two independent <code>Y.Doc</code>s, no server. Edit each side, then hit sync and watch the actual
+		bytes: a state vector first (tiny — what I already have), then a diff (only what I'm missing).
+		Real <code>yjs</code>, loaded from a CDN, same version this repo pins in
+		<code>packages/app/package.json</code>.
+	</p>
+
+	<div id="warn-banner" class="warn-banner">
+		Module import failed. If you opened this as a bare <code>file://</code> path, some browsers block
+		module scripts fetching remote CDN URLs. Serve it locally instead, e.g. from the repo root:
+		<code>bunx serve docs</code>, then open the printed <code>localhost</code> URL.
+	</div>
+
+	<div class="bar">
+		<div class="group">
+			<strong style="font-size:13px;">Edges schema</strong>
+			<label class="radio"><input type="radio" name="schema" value="array" checked /> Y.Array (current, buggy)</label>
+			<label class="radio"><input type="radio" name="schema" value="map" /> Y.Map by key (fixed)</label>
+		</div>
+		<div class="group">
+			<button id="btn-reset">Reset both peers</button>
+		</div>
+		<div class="group">
+			<button id="btn-scenario-race">Load scenario: race on same field</button>
+			<button id="btn-scenario-dup">Load scenario: draw same edge on both sides</button>
+		</div>
+	</div>
+
+	<div class="grid">
+		<div class="peer" id="peer-a"></div>
+		<div class="peer" id="peer-b"></div>
+	</div>
+
+	<div class="sync-zone">
+		<button id="btn-sync" class="primary">Sync A ⇄ B</button>
+		<div class="log" id="log"></div>
+	</div>
+
+	<p class="footnote">
+		"Highest clientID wins" for concurrent writes to the same field — try the race scenario twice and
+		watch it always resolve to peer B, whose fixed clientID (2002) is higher than A's (1001). Switch the
+		edges schema to Y.Map and re-run the duplicate-edge scenario to see the fix from
+		<code>packages/app/src/lib/state/edge.ts</code> in practice.
+	</p>
+</div>
+
+<script type="module">
+	let Y;
+	try {
+		Y = await import('https://esm.sh/yjs@13.6.32');
+	} catch (e) {
+		document.getElementById('warn-banner').style.display = 'block';
+		throw e;
+	}
+
+	const CLIENT_ID_A = 1001;
+	const CLIENT_ID_B = 2002;
+
+	let schemaMode = 'array'; // 'array' | 'map'
+	let A, B;
+
+	function normalizeEdge(a, b) {
+		return a < b ? { from: a, to: b } : { from: b, to: a };
+	}
+	function edgeKey(e) {
+		return `${e.from}::${e.to}`;
+	}
+	function hexPreview(bytes, n = 10) {
+		const slice = Array.from(bytes.slice(0, n)).map((b) => b.toString(16).padStart(2, '0'));
+		return slice.join(' ') + (bytes.length > n ? ' …' : '');
+	}
+	function bytesEqual(a, b) {
+		if (a.length !== b.length) return false;
+		for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+		return true;
+	}
+	function wait(ms) {
+		return new Promise((r) => setTimeout(r, ms));
+	}
+
+	function makePeer(label, clientID) {
+		const doc = new Y.Doc();
+		doc.clientID = clientID;
+		const meta = doc.getMap('meta');
+		const nodes = doc.getMap('nodes');
+		const edgesArray = doc.getArray('edges');
+		const edgesMap = doc.getMap('edgesByKey');
+
+		const peer = { label, clientID, doc, meta, nodes, edgesArray, edgesMap };
+
+		doc.on('update', () => render(peer));
+		return peer;
+	}
+
+	function edgesList(peer) {
+		// Returns [{key, from, to, dup}] — dup marks entries sharing a key (array mode only).
+		if (schemaMode === 'array') {
+			const seen = new Map();
+			return peer.edgesArray.toArray().map((e) => {
+				const k = edgeKey(e);
+				const count = (seen.get(k) || 0) + 1;
+				seen.set(k, count);
+				return { key: k, from: e.from, to: e.to, dup: count > 1 };
+			});
+		}
+		return [...peer.edgesMap.entries()].map(([k, e]) => ({ key: k, from: e.from, to: e.to, dup: false }));
+	}
+
+	function addEdge(peer, a, b) {
+		if (a === b) return;
+		const edge = normalizeEdge(a, b);
+		const key = edgeKey(edge);
+		peer.doc.transact(() => {
+			if (schemaMode === 'array') {
+				// Mirrors the app's real addEdge(): a *local* guard only, which is exactly
+				// why it can't stop a duplicate that a peer inserts concurrently.
+				const exists = peer.edgesArray.toArray().some((e) => edgeKey(e) === key);
+				if (!exists) peer.edgesArray.push([edge]);
+			} else {
+				peer.edgesMap.set(key, edge);
+			}
+		});
+		render(peer);
+	}
+
+	function removeEdge(peer, key) {
+		peer.doc.transact(() => {
+			if (schemaMode === 'array') {
+				for (let i = peer.edgesArray.length - 1; i >= 0; i--) {
+					if (edgeKey(peer.edgesArray.get(i)) === key) {
+						peer.edgesArray.delete(i, 1);
+						return; // first match only — same limitation as the real removeEdge()
+					}
+				}
+			} else {
+				peer.edgesMap.delete(key);
+			}
+		});
+		render(peer);
+	}
+
+	function addNode(peer, id, label, x, y) {
+		peer.doc.transact(() => {
+			const n = new Y.Map();
+			n.set('label', label);
+			n.set('x', x);
+			n.set('y', y);
+			n.set('points', 0);
+			peer.nodes.set(id, n);
+		});
+		render(peer);
+	}
+
+	function bumpField(peer, id, field, delta) {
+		peer.doc.transact(() => {
+			const n = peer.nodes.get(id);
+			n.set(field, (n.get(field) || 0) + delta);
+		});
+		render(peer);
+	}
+
+	function removeNode(peer, id) {
+		peer.doc.transact(() => {
+			peer.nodes.delete(id);
+			if (schemaMode === 'array') {
+				for (let i = peer.edgesArray.length - 1; i >= 0; i--) {
+					const e = peer.edgesArray.get(i);
+					if (e.from === id || e.to === id) peer.edgesArray.delete(i, 1);
+				}
+			} else {
+				for (const [k, e] of [...peer.edgesMap.entries()]) {
+					if (e.from === id || e.to === id) peer.edgesMap.delete(k);
+				}
+			}
+		});
+		render(peer);
+	}
+
+	let nodeCounter = 1;
+
+	function render(peer) {
+		const el = document.getElementById(peer === A ? 'peer-a' : 'peer-b');
+		const nodeIds = [...peer.nodes.keys()].sort();
+		const otherIds = nodeIds; // options for edge select
+
+		const sv = Y.decodeStateVector(Y.encodeStateVector(peer.doc));
+		const svBytes = Y.encodeStateVector(peer.doc);
+		const svEntries = [...sv.entries()].sort((a, b) => a[0] - b[0]);
+		const svText = svEntries.length
+			? svEntries.map(([cid, clock]) => `${cid}:${clock}`).join(', ')
+			: '(empty)';
+
+		el.innerHTML = `
+			<div class="peer-head">
+				<h2 style="margin:0;">Peer ${peer.label}</h2>
+				<span class="id">clientID ${peer.clientID}</span>
+			</div>
+			<div class="field-row">
+				<label>name</label>
+				<input type="text" data-role="name" value="${peer.meta.get('name') ?? ''}" placeholder="(unset)" />
+			</div>
+			<div class="section-label">Nodes</div>
+			<div data-role="nodes"></div>
+			<button class="small" data-role="add-node">+ add node</button>
+			<div class="section-label">Edges</div>
+			<div data-role="edges"></div>
+			<div class="add-edge-row">
+				<select data-role="edge-from"></select>
+				<span style="color:var(--muted);font-size:12px;">↔</span>
+				<select data-role="edge-to"></select>
+				<button class="small" data-role="add-edge">connect</button>
+			</div>
+			<div class="sv-box">
+				<div class="label">State vector (${svBytes.byteLength} bytes)</div>
+				<div class="bytes">${hexPreview(svBytes)}</div>
+				<div class="size">clientID:clock → ${svText}</div>
+			</div>
+		`;
+
+		el.querySelector('[data-role="name"]').addEventListener('change', (e) => {
+			peer.doc.transact(() => peer.meta.set('name', e.target.value));
+		});
+
+		const nodesEl = el.querySelector('[data-role="nodes"]');
+		if (nodeIds.length === 0) {
+			nodesEl.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:4px 0;">none yet</div>`;
+		}
+		for (const id of nodeIds) {
+			const n = peer.nodes.get(id);
+			const row = document.createElement('div');
+			row.className = 'node-row';
+			row.innerHTML = `
+				<span style="flex:1;font-size:13px;">${n.get('label')}</span>
+				<span class="stepper">x<button class="small" data-x="-1">−</button><span class="val">${n.get('x')}</span><button class="small" data-x="1">+</button></span>
+				<span class="stepper">y<button class="small" data-y="-1">−</button><span class="val">${n.get('y')}</span><button class="small" data-y="1">+</button></span>
+				<span class="pts">${n.get('points')} pt</span>
+				<button class="small" data-p="1">+1pt</button>
+				<button class="small" data-remove>✕</button>
+			`;
+			row.querySelector('[data-x="-1"]').onclick = () => bumpField(peer, id, 'x', -1);
+			row.querySelector('[data-x="1"]').onclick = () => bumpField(peer, id, 'x', 1);
+			row.querySelector('[data-y="-1"]').onclick = () => bumpField(peer, id, 'y', -1);
+			row.querySelector('[data-y="1"]').onclick = () => bumpField(peer, id, 'y', 1);
+			row.querySelector('[data-p="1"]').onclick = () => bumpField(peer, id, 'points', 1);
+			row.querySelector('[data-remove]').onclick = () => removeNode(peer, id);
+			nodesEl.appendChild(row);
+		}
+		el.querySelector('[data-role="add-node"]').onclick = () => {
+			const id = `node-${nodeCounter++}`;
+			addNode(peer, id, `Skill ${id.split('-')[1]}`, 0, 0);
+		};
+
+		const edgesEl = el.querySelector('[data-role="edges"]');
+		const edges = edgesList(peer);
+		if (edges.length === 0) {
+			edgesEl.innerHTML = `<div style="color:var(--muted);font-size:12px;padding:4px 0;">none yet</div>`;
+		}
+		for (const e of edges) {
+			const row = document.createElement('div');
+			row.className = 'edge-row' + (e.dup ? ' dup' : '');
+			row.innerHTML = `<span>${e.from} ↔ ${e.to}${e.dup ? ' (duplicate!)' : ''}</span>`;
+			const btn = document.createElement('button');
+			btn.className = 'small';
+			btn.textContent = '✕';
+			btn.onclick = () => removeEdge(peer, e.key);
+			row.appendChild(btn);
+			edgesEl.appendChild(row);
+		}
+
+		const fromSel = el.querySelector('[data-role="edge-from"]');
+		const toSel = el.querySelector('[data-role="edge-to"]');
+		for (const sel of [fromSel, toSel]) {
+			sel.innerHTML = otherIds.map((id) => `<option value="${id}">${id}</option>`).join('');
+		}
+		if (otherIds.length > 1) toSel.selectedIndex = 1;
+		el.querySelector('[data-role="add-edge"]').onclick = () => {
+			if (fromSel.value && toSel.value) addEdge(peer, fromSel.value, toSel.value);
+		};
+	}
+
+	function log(text, cls = '') {
+		const box = document.getElementById('log');
+		const chip = document.createElement('div');
+		chip.className = 'chip' + (cls ? ' ' + cls : '');
+		chip.textContent = text;
+		box.appendChild(chip);
+		box.scrollTop = box.scrollHeight;
+	}
+
+	async function sync() {
+		document.getElementById('btn-sync').disabled = true;
+		log('— sync started —', 'divider');
+
+		const svA = Y.encodeStateVector(A.doc);
+		const svB = Y.encodeStateVector(B.doc);
+		log(`A → B  state vector  (${svA.byteLength}B)  ${hexPreview(svA)}`, 'a-to-b');
+		await wait(350);
+		log(`B → A  state vector  (${svB.byteLength}B)  ${hexPreview(svB)}`, 'b-to-a');
+		await wait(350);
+
+		const diffForB = Y.encodeStateAsUpdate(A.doc, svB);
+		const diffForA = Y.encodeStateAsUpdate(B.doc, svA);
+
+		log(`A → B  diff  (${diffForB.byteLength}B)  ${hexPreview(diffForB)}`, 'a-to-b');
+		await wait(350);
+		Y.applyUpdate(B.doc, diffForB);
+		render(B);
+
+		log(`B → A  diff  (${diffForA.byteLength}B)  ${hexPreview(diffForA)}`, 'b-to-a');
+		await wait(350);
+		Y.applyUpdate(A.doc, diffForA);
+		render(A);
+
+		await wait(150);
+		const equal = bytesEqual(Y.encodeStateAsUpdate(A.doc), Y.encodeStateAsUpdate(B.doc));
+		log(equal ? '✅ converged — A and B hold identical state' : '⚠️ not converged', equal ? 'good' : 'bad');
+
+		document.getElementById('btn-sync').disabled = false;
+	}
+
+	function resetPeers() {
+		A = makePeer('A', CLIENT_ID_A);
+		B = makePeer('B', CLIENT_ID_B);
+		nodeCounter = 1;
+
+		A.doc.transact(() => A.meta.set('name', 'My Tree'));
+		addNode(A, 'fireball', 'Fireball', 2, 3);
+		addNode(B, 'frostbolt', 'Frostbolt', 5, 6);
+		nodeCounter = 3;
+
+		document.getElementById('log').innerHTML = '';
+		log('two peers, never synced — A named the tree and added Fireball; B added Frostbolt', 'divider');
+		render(A);
+		render(B);
+	}
+
+	document.getElementById('btn-sync').onclick = sync;
+	document.getElementById('btn-reset').onclick = resetPeers;
+
+	for (const input of document.querySelectorAll('input[name="schema"]')) {
+		input.addEventListener('change', (e) => {
+			schemaMode = e.target.value;
+			resetPeers();
+		});
+	}
+
+	document.getElementById('btn-scenario-race').onclick = () => {
+		resetPeers();
+		if (!A.nodes.has('fireball')) addNode(A, 'fireball', 'Fireball', 2, 3);
+		if (!B.nodes.has('fireball')) addNode(B, 'fireball', 'Fireball', 2, 3);
+		A.doc.transact(() => A.nodes.get('fireball').set('x', 10));
+		B.doc.transact(() => B.nodes.get('fireball').set('x', 99));
+		log('A set fireball.x = 10, B set fireball.x = 99 — concurrently, before any sync', 'divider');
+		render(A);
+		render(B);
+	};
+
+	document.getElementById('btn-scenario-dup').onclick = () => {
+		resetPeers();
+		if (!A.nodes.has('frostbolt')) addNode(A, 'frostbolt', 'Frostbolt', 5, 6);
+		if (!B.nodes.has('fireball')) addNode(B, 'fireball', 'Fireball', 2, 3);
+		addEdge(A, 'fireball', 'frostbolt');
+		addEdge(B, 'fireball', 'frostbolt');
+		log('both peers independently connected fireball ↔ frostbolt before syncing', 'divider');
+		render(A);
+		render(B);
+	};
+
+	resetPeers();
+</script>
+</body>
+</html>
