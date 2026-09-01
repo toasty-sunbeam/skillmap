@@ -6,7 +6,6 @@ const text1 = doc1.getText('text');
 const text2 = doc2.getText('text');
 
 text1.insert(0, 'Learning project');
-text2.insert(0, 'Async updates')
 console.log("INIITAL:")
 console.log("text1", text1.toJSON())
 console.log("text2", text2.toJSON())
@@ -21,7 +20,7 @@ console.log("text1", text1.toJSON())
 console.log("text2", text2.toJSON())
 console.log("---")
 
-text2.insert(13, ' ');
+text2.insert(16, ' Async updates');
 const sv1 = Y.encodeStateVector(doc1);
 const update2 = Y.encodeStateAsUpdate(doc2, sv1);
 Y.applyUpdate(doc1, update2);
