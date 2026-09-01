@@ -36,9 +36,20 @@ Reproduce `docs/yjs-sync-playground.html` from scratch as a plain script, no HTM
 Answer these without running code:
 
 1. Why does `Y.encodeStateAsUpdate(doc, sv)` need the state vector argument at all?
+
+It doesn't. If you omit the sv argument, it will compare its current state against an empty document. This will waste space, computation, and bandwidth, but it will work. The sv argument gives you a state to compare against so your updates will be small and efficient.
+
 2. A client has been offline for a week. What travels first when it reconnects, and roughly how big is it?
+
+The first thing to travel is its state vector, which is just a client ID and a clock number for each client.
+
 3. You apply the same update three times. What happens, and why is that not a bug?
+
+Nothing happens. Each update carries a clientId and a clock; clients will see the update has already been applied and skip it.
+
 4. Two peers each hold updates the other lacks. How many messages minimum to converge, and why isn't it one?
+
+A messages B with its state vector. B replies with a state vector and its update. A applies the update, computes a new update, and sends it to B.
 
 **Watch out**
 

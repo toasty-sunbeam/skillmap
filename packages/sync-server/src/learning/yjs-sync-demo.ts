@@ -14,6 +14,7 @@ console.log("---")
 const sv2 = Y.encodeStateVector(doc2);
 const update = Y.encodeStateAsUpdate(doc1, sv2);
 Y.applyUpdate(doc2, update);
+Y.logUpdate(update)
 
 console.log("FIRST UPDATE:");
 console.log("text1", text1.toJSON())
