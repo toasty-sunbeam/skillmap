@@ -10,4 +10,13 @@
 		"skillmap",
 		"ymap"
 	],
+	"python-envs.pythonProjects": [
+		{
+			"path": "packages/sync-server-python",
+			"envManager": "ms-python.python:venv",
+			"packageManager": "ms-python.python:pip"
+		}
+	],
+	"python-envs.defaultEnvManager": "ms-python.python:system",
+	"python.defaultInterpreterPath": "${workspaceFolder}/packages/sync-server-python/.venv/bin/python",
 }
