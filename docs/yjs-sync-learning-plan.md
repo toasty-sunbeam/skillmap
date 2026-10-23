@@ -74,9 +74,20 @@ watch the clock increment. Then wrap several operations in one `doc.transact()` 
 **Check**
 
 1. What does the number in `{1001: 12}` count? Operations? Bytes? Transactions? Something else?
+
+Each change makes the number go up. In Y.Text it's mostly per-character (strictly, per UTF-16 code unit, so an emoji can cost 2). In Y.Array it's one per element. In Y.Map it's one per key write.
+
 2. Does wrapping edits in `transact` change the final clock value? Does it change the number of `update` events fired?
+
+It doesn't change the clock value, but it does reduce the number of events fired.
+
 3. Why does a state vector have one entry per client rather than one number overall?
+
+So it can track which updates it has so far received from each client.
+
 4. Two peers write different keys on the same `Y.Map` concurrently. Do both survive? What about the same key?
+
+On different keys, they both survive. On the same key, applying the update wipes out the old value.
 
 **Watch out**
 
@@ -102,7 +113,13 @@ version against `sync.js` and account for every difference.
 **Check**
 
 1. What are the three sync message types, and which direction does each travel?
+
+SyncStep1, SyncStep2, Update. In a client/server setup, the client sends its SyncStep1, the server replies with SyncStep1 and its own SyncStep1, and thereafter they send Updates to each other.
+
 2. Why does the connecting client send step 1 *and* the server send its own step 1? Why isn't one enough?
+
+The client and server each need to notify the other of their state vector so the other knows which updates to send.
+
 3. `messageYjsUpdate` and `messageYjsSyncStep2` both carry an update. Why are they distinct types?
 4. What's the outer envelope in y-websocket that distinguishes a sync message from an awareness message?
 
