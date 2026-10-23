@@ -1,70 +1,29 @@
-# NEXT: Session 1 (Wednesday morning block)
+# NEXT: Session 2 (Monday morning block)
 
-**Goal:** break the seal. By the end, Python is installed, you've done a few Exercism exercises by hand, and a tiny WebSocket server answers your browser.
+**Last time:** Finished the echo server (milestone 1). It prints a line on connect and in a `finally` block on disconnect. Exercism done: Basics, Numbers, Bools, Conditionals, Comparisons.
+**Stopped at:** `echo()` in `packages/sync-server-python/main.py`. It works. Killing the Firefox tab process printed no traceback. You decided not to catch `ConnectionClosed`.
+**First step, no decisions needed:** open `main.py` and read the `ServerConnection` docs ("new asyncio" page) for how to get the request path.
 
-**Rule for every session:** you type every line. Claude explains, hints and reviews. If you're stuck for 10 minutes, ask for a hint, not the answer.
+## This session's goal
+Milestone 2: **rooms.** The URL path picks the room (`ws://localhost:8765/room-a`). Open two tabs on the same room, and a message sent in one shows up in the other. A tab in a different room sees nothing.
 
-**First step, no decisions needed:** open a terminal and install uv.
+Done when you can show that with two tabs in `room-a` and one in `room-b`.
 
----
+## Steps
+1. Find out how to read the request path from the connection object (`ServerConnection` docs, "new asyncio" page).
+2. Keep a module-level `dict` that maps a room name to a `set` of connections.
+3. On connect, add the connection to its room. On disconnect, remove it. Put the removal in `finally`.
+4. On each message, send it to every other connection in the same room.
+5. Decide what to do when a room becomes empty (delete it, or leave it).
+6. Add one pytest test for the room logic. Ask Claude about `pytest-asyncio` when you reach this.
+7. Exercise reps: do the next unlocked Exercism exercises (lists, tuples, dicts). Aim for 45 minutes.
 
-## Part 1: Toolchain (~30 min)
-
-1. Install uv: https://docs.astral.sh/uv/getting-started/installation/
-   Check: `uv --version`
-2. Install Python: `uv python install`
-   Check: `uv run python --version`
-3. Exercism:
-   - Make an account at exercism.org and join the **Python** track.
-   - Install the Exercism CLI (the track page links it).
-   - Run `exercism configure --token=<your token>`. The token is on your Exercism settings page.
-
-## Part 2: Exercism warm-up (~60 min, stop at the hour wherever you are)
-
-Do the learning exercises in the order the track unlocks them. The first few are usually:
-
-- `guidos-gorgeous-lasagna` (functions, docstrings)
-- `ghost-gobble-arcade-game` (booleans)
-- `little-sisters-vocab` (strings)
-- `meltdown-mitigation` (conditionals)
-
-The loop for each one:
-
-1. `exercism download --track=python --exercise=<slug>`
-2. Open the folder and read `README.md`.
-3. Write your solution by hand.
-4. Run `uvx pytest` inside the exercise folder until it's green.
-5. `exercism submit <file>.py`
-
-## Part 3: WebSocket echo server (~60 min)
-
-1. In the talent tree repo, make a folder for the server (`server/` or whatever fits). Inside it, run:
-   ```
-   uv init
-   uv add websockets
-   ```
-2. Write `main.py`: an async server on `localhost:8765` that sends back whatever it receives.
-   Docs: https://websockets.readthedocs.io (Getting started; use the `websockets.asyncio.server` API).
-3. Run it: `uv run main.py`
-4. Test from any browser's dev console:
-   ```js
-   const ws = new WebSocket("ws://localhost:8765");
-   ws.onmessage = (e) => console.log("got:", e.data);
-   ws.onopen = () => ws.send("hello from the browser");
-   ```
-
-**Done when** the console prints `got: hello from the browser`.
-
-New things you'll meet here (ask Claude about any of them): `async def`, `await`, `asyncio.run()`, `async for`, `if __name__ == "__main__":`
-
-**Stretch, if time is left:** print a line on the server when a client connects and when it disconnects.
-
----
+## New things you'll meet
+- `dict` and `set` (like `Map` and `Set` in JS), and `dict.setdefault`
+- `asyncio.gather` or `websockets.broadcast` for sending to many clients
+- `set.discard` vs. `set.remove`
+- Type hints on function signatures, such as `dict[str, set[ServerConnection]]`
+- `pytest` and `pytest-asyncio`
 
 ## Before you stop
-
-Ask Claude to rewrite this file for Session 2: what you finished, where you stopped, and the first concrete step for next time.
-
-Next milestone after this one: **rooms.** Open two browser tabs; a message sent in one shows up in the other.
-
-Breaks: a 3-hour block has room for two breaks. On lift days, use the break cards.
+Ask Claude to rewrite this file for the next session.
