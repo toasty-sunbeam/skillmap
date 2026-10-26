@@ -15,7 +15,7 @@ async def main():
     server = await serve(echo, "localhost", 8765)
     await server.serve_forever()
 
-if __name__ == "__main__": # True when this file is run directly, e.g. `python main.py`. False when this file is imported into another module.
+if __name__ == "__main__": # True when this file is run directly, e.g. `python hello-world.py`. False when this file is imported into another module.
     asyncio.run(main())
 
 """

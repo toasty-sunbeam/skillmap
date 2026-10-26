@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Room test client</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; }
+    #log { border: 1px solid #ccc; padding: 0.5rem; height: 20rem; overflow-y: auto; font-family: monospace; }
+    .sent { color: #06c; }
+    .system { color: #888; }
+  </style>
+</head>
+<body>
+  <h1>Room: <span id="room"></span></h1>
+  <p>Status: <span id="status">connecting…</span></p>
+  <div id="log"></div>
+  <form id="form">
+    <input id="input" autocomplete="off" placeholder="Type a message" autofocus>
+    <button>Send</button>
+  </form>
+
+  <script>
+    // The page's own path is the room, so http://localhost:8765/room-a joins room-a.
+    const room = location.pathname;
+    document.getElementById("room").textContent = room;
+
+    const log = document.getElementById("log");
+    const status = document.getElementById("status");
+    const input = document.getElementById("input");
+
+    function addLine(text, className) {
+      const line = document.createElement("div");
+      line.textContent = text;
+      if (className) line.className = className;
+      log.append(line);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    const ws = new WebSocket(`ws://${location.host}${room}`);
+    ws.onopen = () => { status.textContent = "open"; addLine("connected", "system"); };
+    ws.onclose = (e) => { status.textContent = `closed (code ${e.code})`; addLine("disconnected", "system"); };
+    ws.onerror = () => addLine("error (see console)", "system");
+    ws.onmessage = (e) => addLine(`got: ${e.data}`);
+
+    document.getElementById("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!input.value || ws.readyState !== WebSocket.OPEN) return;
+      ws.send(input.value);
+      addLine(`sent: ${input.value}`, "sent");
+      input.value = "";
+    });
+  </script>
+</body>
+</html>

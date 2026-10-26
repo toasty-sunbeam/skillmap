@@ -1,0 +1,1 @@
+Execute with `uv run <filename>.py`

@@ -17,6 +17,6 @@
 			"packageManager": "ms-python.python:pip"
 		}
 	],
-	"python-envs.defaultEnvManager": "ms-python.python:system",
+	"python-envs.defaultEnvManager": "ms-python.python:venv",
 	"python.defaultInterpreterPath": "${workspaceFolder}/packages/sync-server-python/.venv/bin/python",
 }
